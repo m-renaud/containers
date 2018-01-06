@@ -3,7 +3,7 @@ Maps
 
 .. highlight:: haskell
 
-Maps, sometimes referred to as dictionaries in other languages, allow you to
+Maps (sometimes referred to as dictionaries in other languages) allow you to
 store associations between *unique keys* and *values*. There are three
 implementations provided by the ``containers`` package: `Data.Map.Strict
 <https://hackage.haskell.org/package/containers/docs/Data-Map-Strict.html>`_,
@@ -12,7 +12,7 @@ implementations provided by the ``containers`` package: `Data.Map.Strict
 `Data.IntMap
 <https://hackage.haskell.org/package/containers/docs/Data-IntMap.html>`_. You
 almost never want the lazy version so use ``Data.Map.Strict``, or if your keys
-are ``Int`` use ``Data.IntMap``; all of these implementations are *immutable*.
+are ``Int`` use ``Data.IntMap``. All of these implementations are *immutable*.
 
 ::
 
@@ -78,7 +78,7 @@ The following GHCi session shows some of the basic map functionality::
 
 .. TIP:: You can use the `OverloadedLists
 	 <https://ghc.haskell.org/trac/ghc/wiki/OverloadedLists>`_ extension so
-	 you don't need to write ``fromList [1, 2, 3]`` everywhere, instead you
+	 you don't need to write ``fromList [1, 2, 3]`` everywhere; instead you
 	 can just write ``[1, 2, 3]`` and if the function is expecting a map it
 	 will be converted automatically! The code here will continue to use
 	 ``fromList`` for clarity though.
@@ -106,7 +106,7 @@ Common API Functions
 .. TIP::
    All of these functions that work for ``Map`` will also work for ``IntMap``,
    which has the key type ``k`` specialized to ``Int``. Anywhere that you
-   see ``Map k v`` you can replace it with ``IntMap v``.
+   see ``Map Int v`` you can replace it with ``IntMap v``.
 
 .. NOTE::
    ``fromList [some,map,entries]`` is how a ``Map`` is printed.
@@ -179,7 +179,7 @@ keys, where ``f`` is used to "combine" (or "choose") values with the same key.
 ::
 
     -- Build a map from a list, but only keep the largest value for each key.
-    Map.fromListWith max [("a", 1), ("a", 2), ("b", 2)]
+    Map.fromListWith max [("a", 2), ("a", 1), ("b", 2)]
     > fromList [("a",2),("b",2)]
 
     -- Build a histogram from a list of elements.
@@ -203,7 +203,7 @@ Create a list from a map
     Map.toAscList m = ...
 
 .. NOTE::
-   These all do the same thing, use ``toAscList`` because its name indicates
+   These all do the same thing; use ``toAscList`` because its name indicates
    the ordering.
 
 .. NOTE::
@@ -211,7 +211,7 @@ Create a list from a map
    equivalent to ``elems``.
 
 :map:`toAscList`, :map:`toList`, and :map:`assocs` returns a list containing the
-(key, value) pairts in the map ``m`` in *ascending* key order.
+(key, value) pairs in the map ``m`` in *ascending* key order.
 
 ::
 
@@ -318,7 +318,7 @@ For example::
     > "one"
 
 .. WARNING::
-   **DO NOT** Use ``Map.!``, it is partial and throws a runtime error if the key
+   **DO NOT** Use ``Map.!``. It is partial and throws a runtime error if the key
    doesn't exist.
 
 Find the minimum/maximum
@@ -332,8 +332,8 @@ Find the minimum/maximum
     Map.lookupMin m = ...
     Map.lookupMax m = ...
 
-:map:`lookupMin` return the minimum, or maximum respectively, element of the map
-``m``, or ``Nothing`` if the map is empty.
+:map:`lookupMin` and :map:`lookupMax` respectively return the minimum or maximum
+element of the map ``m``, or ``Nothing`` if the map is empty.
 
 ::
 
@@ -347,7 +347,7 @@ Find the minimum/maximum
     > Just (3,"three")
 
 .. WARNING::
-   **DO NOT** use ``Map.findMin`` or ``Map.findMax``, they are partial and throw
+   **DO NOT** use ``Map.findMin`` or ``Map.findMax``. They are partial and throw
    a runtime error if the map is empty.
 
 Modification
@@ -384,10 +384,10 @@ Removing an entry from a map
     Map.delete :: Ord k => k -> Map k v -> Map k v
     Map.delete key m = ...
 
-:map:`delete` the entry with the specified ``key`` from the map ``m``, if the key
-doesn't exist it leaves the map unchanged. Remember, maps are immutable so if
-you delete an entry from a map you need to assign the new map to a new
-variable.
+:map:`delete` removes the entry with the specified ``key`` from the
+map ``m``.  If the key doesn't exist it leaves the map
+unchanged. Remember, maps are immutable so if you delete an entry from
+a map you need to assign the new map to a new variable.
 
 ::
 
@@ -406,7 +406,7 @@ Filtering map entries
     Map.filterWithKey predicate m = ...
 
 :map:`filterWithKey` produces a map consisting of all entries of ``m`` for which
-     the ``predicate`` returns ``True``.
+the ``predicate`` returns ``True``.
 
 ::
 
@@ -424,16 +424,17 @@ Modifying a map entry
     Map.adjust f key m = ...
 
 :map:`abjust` applies the value transformation function ``f`` to the entry with
-given ``key``, if no entry for that key exists then the map is left unchanged.
+given ``key``. If no entry for that key exists then the map is left unchanged.
 
 ::
 
     Map.update :: Ord k => (v -> Maybe v) -> k -> Map k v -> Map k v
     Map.update f key m = ...
 
-Apply the value transformation function ``f`` to the entry with given ``key``,
-if no entry for that key exists then the map is left unchanged, if the function
-returns ``Nothing`` then the entry is deleted.
+:map:`apply` applies the value transformation function ``f`` to the
+entry with given ``key``. If no entry for that key exists then the map
+is left unchanged. If the function returns ``Nothing`` then the entry
+is deleted.
 
 
 Modifying all map entries (mapping)
@@ -533,7 +534,7 @@ Difference
 Typeclass Instances
 -------------------
 
-``Map`` is an instance of a number of common typeclasses, for the full list see
+``Map`` is an instance of a number of common typeclasses. For the full list see
 the `docs
 <https://hackage.haskell.org/package/containers-0.5.10.2/docs/Data-Map-Strict.html#t:Map>`_.
 
@@ -566,7 +567,7 @@ Serialization
 -------------
 
 The best way to serialize and deserialize maps is to use one of the many
-libraries which already supports serializing map. `binary
+libraries which already support serializing map. `binary
 <https://hackage.haskell.org/package/binary>`_, `cereal
 <https://hackage.haskell.org/package/cereal>`_, and `store
 <https://hackage.haskell.org/package/store>`_ are some common libraries that
